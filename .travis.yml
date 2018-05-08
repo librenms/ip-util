@@ -1,0 +1,19 @@
+language: php
+matrix:
+  fast_finish: true
+  include:
+  - php: 7.2
+    env: STYLE_CHECK=1
+  - php: 5.6
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+install:
+  - composer install --prefer-dist --no-interaction
+
+script:
+  - vendor/bin/phpcs -n -p --colors --extensions=php --standard=PSR2 LibreNMS
+  - vendor/bin/phpunit --colors=always tests
