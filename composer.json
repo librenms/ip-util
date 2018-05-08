@@ -1,5 +1,5 @@
 {
-    "name": "librenms/IPUtil",
+    "name": "librenms/ip-util",
     "description": "IPv4 and IPv6 Address/Network parsing utility classes",
     "type": "project",
     "keywords": ["network", "IP", "ipv6", "ipv4", "subnet", "cidr", "IP-Tools"],
