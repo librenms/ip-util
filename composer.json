@@ -9,8 +9,7 @@
         "source": "https://github.com/librenms/librenms/",
         "docs": "http://docs.librenms.org/",
         "forum": "https://community.librenms.org/",
-        "issues": "https://github.com/librenms/librenms/issues/",
-        "irc": "https://discord.gg/V8s5JZJ"
+        "issues": "https://discord.gg/V8s5JZJ"
     },
     "require": {
         "php": ">=5.6.4"
