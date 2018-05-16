@@ -129,4 +129,27 @@ class IPv4 extends IP
     {
         return (string)$this->ip;
     }
+
+    /**
+     * Extract an address from a cidr, assume a host is given if it does not contain /
+     * Handle netmasks in addition to cidr
+     *
+     * @param string $ip
+     * @return array [$ip, $cidr]
+     */
+    protected function extractCidr($ip)
+    {
+        $parts = explode('/', $ip, 2);
+
+        if (isset($parts[1])) {
+            if (strpos($parts[1], '.') !== false) {
+                // could be a netmask instead of cidr
+                $parts[1] = self::netmask2cidr($parts[1]);
+            }
+        } else {
+            $parts[1] = $this->host_bits;
+        }
+
+        return $parts;
+    }
 }

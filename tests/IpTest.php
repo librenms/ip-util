@@ -72,6 +72,16 @@ class IpTest extends TestCase
         $this->assertEquals('::1', new IPv6('::1'));
     }
 
+    public function testNetworkParse()
+    {
+        $this->assertEquals('192.168.3.0/24', IP::parse('192.168.3.0/24'));
+        $this->assertEquals('192.168.0.1', IP::parse('192.168.0.1/32'));
+        $this->assertEquals('127.0.0.1/8', IP::parse('127.0.0.1/8'));
+        $this->assertEquals('10.8.0.0/22', IP::parse('10.8.0.0/255.255.252.0'));
+        $this->assertEquals('2001:db8:85a3::8a2e:370:7334/64', IP::parse('2001:db8:85a3::8a2e:370:7334/64'));
+        $this->assertEquals('::1', IP::parse('::1/128'));
+    }
+
     /**
      * @expectedException \LibreNMS\Exceptions\InvalidIpException
      */
@@ -155,6 +165,7 @@ class IpTest extends TestCase
         $this->assertSame(30, IPv4::netmask2cidr('255.255.255.252'));
         $this->assertSame(26, IPv4::netmask2cidr('255.255.255.192'));
         $this->assertSame(16, IPv4::netmask2cidr('255.255.0.0'));
+        $this->assertSame(0, IPv4::netmask2cidr('0.0.0.0'));
     }
 
     /**
