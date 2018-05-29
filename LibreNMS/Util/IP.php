@@ -156,6 +156,17 @@ abstract class IP
     abstract public function inNetwork($network);
 
     /**
+     * Checks if this IP is a network.
+     * This generally means hostmask is < 32 or < 128
+     *
+     * @return bool
+     */
+    public function isNetwork()
+    {
+        return $this->cidr < $this->host_bits;
+    }
+
+    /**
      * Check if this IP is in the reserved range.
      * @return bool
      */

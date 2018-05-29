@@ -82,6 +82,16 @@ class IpTest extends TestCase
         $this->assertEquals('::1', IP::parse('::1/128'));
     }
 
+    public function testIsNetwork()
+    {
+        $this->assertFalse(IP::parse('192.168.3.0')->isNetwork());
+        $this->assertFalse(IP::parse('192.168.3.0/32')->isNetwork());
+        $this->assertTrue(IP::parse('192.168.3.0/24')->isNetwork());
+        $this->assertFalse(IPv6::parse('2001:db8:85a3::8a2e:370:7334')->isNetwork());
+        $this->assertFalse(IPv6::parse('2001:db8:85a3::8a2e:370:7334/128')->isNetwork());
+        $this->assertTrue(IPv6::parse('2001:db8:85a3::8a2e:370:7334/64')->isNetwork());
+    }
+
     /**
      * @expectedException \LibreNMS\Exceptions\InvalidIpException
      */
