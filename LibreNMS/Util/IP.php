@@ -176,6 +176,15 @@ abstract class IP
     }
 
     /**
+     * Check if this IP is in a private range.
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return filter_var($this->ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false;
+    }
+
+    /**
      * Remove extra 0s from this IPv6 address to make it easier to read.
      * IPv4 addresses, just return the address.
      * @return string|false
