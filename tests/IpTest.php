@@ -235,7 +235,8 @@ class IpTest extends TestCase
         $this->assertSame('192.168.1.0', IP::parse('192.168.1.34')->getNetworkAddress(24));
         $this->assertSame('192.168.16.0/20', IP::parse('192.168.23.45')->getNetwork(20));
 
-        $this->assertSame('2001:db8:85a3::/64', IP::parse('2001:db8:85a3:0:341a:8a2e:0370:7334')->getNetwork(64));
+        $this->assertSame('2001:db8:85a3:4352::/64', IP::parse('2001:db8:85a3:4352:341a:8a2e:0370:7334')->getNetwork(64));
+        $this->assertSame('2001:db8:85a3:4350::/60', IP::parse('2001:db8:85a3:4352:341a:8a2e:0370:7334')->getNetwork(60));
         $this->assertSame('2001:db8:85a3:3400::/54', IP::parse('2001:db8:85a3:369a::370:7334/54')->getNetwork());
         $this->assertSame('2001:db8:85a3:3600::/55', IP::parse('2001:db8:85a3:369a::370:7334/55')->getNetwork());
         $this->assertSame('2001:db8:85a3:341a::370:7334/128', IP::parse('2001:db8:85a3:341a::370:7334')->getNetwork());
