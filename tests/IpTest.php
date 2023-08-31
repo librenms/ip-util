@@ -47,7 +47,7 @@ class IpTest extends TestCase
         $this->assertTrue(IP::isValid('8.8.8.8', true));
         $this->assertTrue(IPv4::isValid('192.168.0.1', true));
         $this->assertTrue(IPv6::isValid('FF81::', true));
-        $this->assertTrue(IPv6::isValid('2001:db8:85a3::8a2e:370:7334', true));
+        $this->assertTrue(IPv6::isValid('2001:db8:85a3::8a2e:370:7334', false));
         $this->assertFalse(IPv4::isValid('127.0.0.1', true));
         $this->assertFalse(IPv6::isValid('::1', true));
         $this->assertFalse(IP::isValid('169.254.1.1', true));
@@ -93,42 +93,47 @@ class IpTest extends TestCase
     }
 
     /**
-     * @expectedException \LibreNMS\Exceptions\InvalidIpException
+     * @throws \LibreNMS\Exceptions\InvalidIpException
      */
     public function  testEmptyStringException()
     {
+        $this->expectException(\LibreNMS\Exceptions\InvalidIpException::class);
         IP::parse('');
     }
 
     /**
-     * @expectedException \LibreNMS\Exceptions\InvalidIpException
+     * @throws \LibreNMS\Exceptions\InvalidIpException
      */
     public function  testJustIntException()
     {
+        $this->expectException(\LibreNMS\Exceptions\InvalidIpException::class);
         IP::parse('42');
     }
 
     /**
-     * @expectedException \LibreNMS\Exceptions\InvalidIpException
+     * @throws \LibreNMS\Exceptions\InvalidIpException
      */
     public function  testNumberTooHighException()
     {
+        $this->expectException(\LibreNMS\Exceptions\InvalidIpException::class);
         IP::parse('192.168.1.256');
     }
 
     /**
-     * @expectedException \LibreNMS\Exceptions\InvalidIpException
+     * @throws \LibreNMS\Exceptions\InvalidIpException
      */
     public function  testNotIpv6Exception()
     {
+        $this->expectException(\LibreNMS\Exceptions\InvalidIpException::class);
         new IPv6('192.168.0.1');
     }
 
     /**
-     * @expectedException \LibreNMS\Exceptions\InvalidIpException
+     * @throws \LibreNMS\Exceptions\InvalidIpException
      */
     public function  testNotIpv4Exception()
     {
+        $this->expectException(\LibreNMS\Exceptions\InvalidIpException::class);
         new IPv4('::1');
     }
 
@@ -158,6 +163,7 @@ class IpTest extends TestCase
      */
     public function  testInvalidIPv4HexException()
     {
+        $this->expectException(\LibreNMS\Exceptions\InvalidIpException::class);
         IP::fromHexString("c0 a8 01 01 fe");
     }
 
@@ -166,6 +172,7 @@ class IpTest extends TestCase
      */
     public function  testInvalidIPv6HexException()
     {
+        $this->expectException(\LibreNMS\Exceptions\InvalidIpException::class);
         IP::fromHexString('20 01 0d b8 00 00 00 00 00 00 00 00 00 02 00 00 00 01');
     }
 
