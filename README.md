@@ -1,3 +1,5 @@
+[![CI](https://github.com/librenms/ip-util/actions/workflows/ci.yaml/badge.svg)](https://github.com/librenms/ip-util/actions/workflows/ci.yaml)
+
 # IPUtil
 IPv4 and IPv6 Address/Network parsing utility classes
 
