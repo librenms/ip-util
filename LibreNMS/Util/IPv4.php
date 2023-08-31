@@ -27,8 +27,11 @@ namespace LibreNMS\Util;
 
 use LibreNMS\Exceptions\InvalidIpException;
 
-class IPv4 extends IP
+class IPv4 extends IP implements \Iterator
 {
+    private $current;
+    private $networkLongIp;
+
     /**
      * IPv4 constructor.
      * @param $ipv4
@@ -42,6 +45,8 @@ class IPv4 extends IP
         if (!self::isValid($this->ip)) {
             throw new InvalidIpException("$ipv4 is not a valid ipv4 address");
         }
+
+        $this->networkLongIp = $this->calculateNetworkAddress($this->ip, $this->cidr);
     }
 
     /**
@@ -113,11 +118,11 @@ class IPv4 extends IP
      */
     public function getNetworkAddress($cidr = null)
     {
-        if (is_null($cidr)) {
-            $cidr = $this->cidr;
+        if (is_null($cidr) || $cidr == $this->cidr) {
+            return long2ip($this->networkLongIp);
         }
 
-        return long2ip(ip2long($this->ip) & $this->cidr2long($cidr));
+        return long2ip($this->calculateNetworkAddress($this->ip, $cidr));
     }
 
     /**
@@ -128,6 +133,19 @@ class IPv4 extends IP
     public function toSnmpIndex()
     {
         return (string)$this->ip;
+    }
+
+
+    /**
+     * Get the long of the network address for the given IP and cidr.
+     *
+     * @param string $ip
+     * @param int $cidr
+     * @return int
+     */
+    protected function calculateNetworkAddress($ip, $cidr)
+    {
+        return ip2long($ip) & $this->cidr2long($cidr);
     }
 
     /**
@@ -151,5 +169,45 @@ class IPv4 extends IP
         }
 
         return $parts;
+    }
+
+    // --- Iterable Methods ---
+    public function current()
+    {
+        return long2ip($this->current);
+    }
+
+    public function next()
+    {
+        $this->current++;
+    }
+
+    public function key()
+    {
+        return $this->current;
+    }
+
+    public function valid()
+    {
+        if ($this->cidr == 32) {
+            return $this->current === $this->networkLongIp;
+        }
+
+        if ($this->cidr == 31) {
+
+            return $this->current === $this->networkLongIp || $this->current === ($this->networkLongIp + 1);
+        }
+
+        $max = $this->networkLongIp - $this->cidr2long($this->cidr) - 1;
+
+        return $this->current > $this->networkLongIp && $this->current < $max;
+    }
+
+    public function rewind()
+    {
+        $this->current = $this->cidr > 30
+            ? $this->networkLongIp
+            : $this->networkLongIp + 1;
+
     }
 }

@@ -253,4 +253,17 @@ class IpTest extends TestCase
         $this->assertSame('0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1', IP::parse('::1')->toSnmpIndex());
         $this->assertSame('32.1.8.120.0.0.224.0.0.130.0.226.0.136.0.161', IP::parse('2001:0878:0000:e000:0082:00e2:0088:00a1')->toSnmpIndex());
     }
+
+    public function testIPv4Iterable() {
+        $this->assertEquals(1, iterator_count(new IPv4('192.168.1.27/32')));
+        $this->assertEquals(2, iterator_count(new IPv4('192.168.1.4/31')));
+        $this->assertEquals(2, iterator_count(new IPv4('192.168.1.8/30')));
+        $this->assertEquals(254, iterator_count(new IPv4('192.168.33.13/24')));
+        $this->assertEquals(1022, iterator_count(new IPv4('192.17.3.7/22')));
+
+        $this->assertEquals([2886730755 => '172.16.4.3'], iterator_to_array(new IPv4('172.16.4.3')));
+        $this->assertEquals([3232235780 => '192.168.1.4', 3232235781 => '192.168.1.5'], iterator_to_array(new IPv4('192.168.1.4/31')));
+        $this->assertEquals([16843009 => '1.1.1.1', 16843010 => '1.1.1.2'], iterator_to_array(new IPv4('1.1.1.1/30')));
+        $this->assertEquals([33686017 => '2.2.2.1', 33686018 => '2.2.2.2', 33686019 => '2.2.2.3', 33686020 => '2.2.2.4', 33686021 => '2.2.2.5', 33686022 => '2.2.2.6'], iterator_to_array(new IPv4('2.2.2.2/29')));
+    }
 }
