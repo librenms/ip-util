@@ -22,5 +22,7 @@ jobs:
                  php-version: ${{ matrix.php-versions }}
             - name: Composer
               uses: php-actions/composer@v6
+              with:
+                  php_version: ${{ matrix.php-versions }}
             - name: PHPUnit
               run: vendor/bin/phpunit
